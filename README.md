@@ -124,4 +124,4 @@ The application color palette was derived from the company’s official website 
 
 ## License
 
-This project is created for educational purposes.
+This project is created for assesment purposes.
