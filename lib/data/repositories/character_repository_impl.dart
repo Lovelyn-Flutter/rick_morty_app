@@ -1,10 +1,8 @@
 import 'package:dartz/dartz.dart';
-import '../../core/utils/failure.dart';
-import '../../domain/entities/character.dart';
-import '../../domain/repositories/character_repository.dart';
+import '../../../core/utils/failure.dart';
+import '../../../domain/entities/character.dart';
+import '../../../domain/repositories/character_repository.dart';
 import '../datasources/character_remote_data_source.dart';
-
-// Repository implementation handling data layer operations
 
 class CharacterRepositoryImpl implements CharacterRepository {
   final CharacterRemoteDataSource remoteDataSource;
@@ -12,9 +10,11 @@ class CharacterRepositoryImpl implements CharacterRepository {
   CharacterRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<Character>>> getCharacters({int page = 1}) async {
+  Future<Either<Failure, List<Character>>> getCharacters(
+      {int page = 1, String? status}) async {
     try {
-      final characters = await remoteDataSource.getCharacters(page: page);
+      final characters =
+          await remoteDataSource.getCharacters(page: page, status: status);
       return Right(characters);
     } catch (e) {
       return Left(ServerFailure('Failed to fetch characters: ${e.toString()}'));
@@ -22,10 +22,11 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   @override
-  Future<Either<Failure, List<Character>>> searchCharacters(
-      String query) async {
+  Future<Either<Failure, List<Character>>> searchCharacters(String query,
+      {String? status}) async {
     try {
-      final characters = await remoteDataSource.searchCharacters(query);
+      final characters =
+          await remoteDataSource.searchCharacters(query, status: status);
       return Right(characters);
     } catch (e) {
       return Left(

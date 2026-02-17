@@ -25,7 +25,7 @@ class ErrorState extends StatelessWidget {
               color: AppColors.textPrimary.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Oops! Something went wrong',
               style: const TextStyle(
                 fontSize: 18,

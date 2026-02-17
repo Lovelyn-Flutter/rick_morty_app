@@ -4,19 +4,21 @@ import '../models/character_model.dart';
 import '../../core/constants/app_constants.dart';
 import 'character_remote_data_source.dart';
 
-// Implementation of remote data source using the Rick and Morty API
-
 class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   final http.Client client;
 
   CharacterRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<List<CharacterModel>> getCharacters({int page = 1}) async {
-    final response = await client.get(
-      Uri.parse(
-          '${AppConstants.baseUrl}${AppConstants.characterEndpoint}?page=$page'),
-    );
+  Future<List<CharacterModel>> getCharacters(
+      {int page = 1, String? status}) async {
+    var url =
+        '${AppConstants.baseUrl}${AppConstants.characterEndpoint}?page=$page';
+    if (status != null && status.isNotEmpty) {
+      url += '&status=$status';
+    }
+
+    final response = await client.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -28,11 +30,15 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   }
 
   @override
-  Future<List<CharacterModel>> searchCharacters(String query) async {
-    final response = await client.get(
-      Uri.parse(
-          '${AppConstants.baseUrl}${AppConstants.characterEndpoint}?name=$query'),
-    );
+  Future<List<CharacterModel>> searchCharacters(String query,
+      {String? status}) async {
+    var url =
+        '${AppConstants.baseUrl}${AppConstants.characterEndpoint}?name=$query';
+    if (status != null && status.isNotEmpty) {
+      url += '&status=$status';
+    }
+
+    final response = await client.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
