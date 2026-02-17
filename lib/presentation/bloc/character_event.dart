@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-// Events that trigger state changes in CharacterBloc, such as loading character, searchinga and also refreshing characters
-
 abstract class CharacterEvent extends Equatable {
   const CharacterEvent();
 
@@ -25,6 +23,15 @@ class SearchCharacters extends CharacterEvent {
 
   @override
   List<Object> get props => [query];
+}
+
+class FilterCharacters extends CharacterEvent {
+  final String? status;
+
+  const FilterCharacters({this.status});
+
+  @override
+  List<Object> get props => [status ?? ''];
 }
 
 class RefreshCharacters extends CharacterEvent {}

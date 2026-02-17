@@ -3,6 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../domain/entities/character.dart';
 import '../../core/theme/app_colors.dart';
 
+//Specific page to show character details when a character card is tapped. It uses a CustomScrollView with a SliverAppBar for the character image and a SliverToBoxAdapter for the character details. The character's status is indicated by a colored dot, and various sections display the character's information, location, and episode count.
+
 class CharacterDetailPage extends StatelessWidget {
   final Character character;
 

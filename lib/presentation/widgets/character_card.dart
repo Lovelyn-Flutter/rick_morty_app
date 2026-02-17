@@ -3,6 +3,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../domain/entities/character.dart';
 import '../../core/theme/app_colors.dart';
 
+//Resuable widget to display character information in a card format. It shows the character's image, name, status, species, and location. The status is indicated by a colored dot (green for alive, red for dead, gray for unknown). When the card is tapped, it triggers a callback to navigate to the character's detail page.
+
 class CharacterCard extends StatelessWidget {
   final Character character;
   final VoidCallback onTap;
