@@ -4,7 +4,7 @@ import '../../domain/repositories/character_repository.dart';
 import 'character_event.dart';
 import 'character_state.dart';
 
-//bloc managing character state and events, with search debouncing and also filtering
+// Bloc handling character-related events and states, including loading, searching, and refreshing characters
 
 class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   final CharacterRepository repository;
@@ -38,23 +38,31 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
   ) async {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    // Debounce search input to avoid uneccessary API calls
+    if (event.query.isEmpty) {
+      add(const LoadCharacters());
+      return;
+    }
 
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (event.query.isEmpty) {
-        add(const LoadCharacters());
-        return;
-      }
+    final completer = Completer<void>();
 
-      emit(CharacterSearching());
-
-      final result = await repository.searchCharacters(event.query);
-
-      result.fold(
-        (failure) => emit(CharacterError(failure.message)),
-        (characters) => emit(CharacterSearchLoaded(characters)),
-      );
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      completer.complete();
     });
+
+    await completer.future;
+
+    if (emit.isDone) return;
+
+    emit(CharacterSearching());
+
+    final result = await repository.searchCharacters(event.query);
+
+    if (emit.isDone) return;
+
+    result.fold(
+      (failure) => emit(CharacterError(failure.message)),
+      (characters) => emit(CharacterSearchLoaded(characters)),
+    );
   }
 
   Future<void> _onRefreshCharacters(
